@@ -178,13 +178,7 @@
                 function ReaderModel() {
                     // todo 实现和阅读器相关的数据交互的方法
                     var ChapterTotal;
-                    // var init = function(UIcallback){
-                    //     getFictionInfo(function(){
-                    //         getCurChapterContent(Chapter_id,function(data){
-                    //            UIcallback&&UIcallback(data);
-                    //         }) 
-                    //     })
-                    // }
+
                     var initPromise = function(){
                         return new Promise(function(resolve,reject){
                             getFictionInfoPromise().then(function(chapter_id){
@@ -194,26 +188,6 @@
                             })
                         })
                     }
-                    // var init = function(){
-                    //     return new Promise(function(resolve,reject){
-                    //         getFictionInfoPromise(function(){
-                    //             getCurChapterContent(Chapter_id,function(data){
-                    //                 resolve&&resolve(data);
-                    //             }) 
-                    //         })
-                    //     })
-                    // }
-                    // var  getFictionInfo = function(callback){
-                    //     $.get('data/chapter.json',function(data){
-                    //         //todo 获取章节信息之后的回调
-                    //         Chapter_id = Util.StorageGetter('last_chapter_id');
-                    //         if(Chapter_id == null){
-                    //             Chapter_id = data.chapters[1].chapter_id;
-                    //         }
-                    //         ChapterTotal = data.chapters.length;
-                    //         callback&&callback();
-                    //     },'json');
-                    // }
 
                     var getFictionInfoPromise = function(){
                         return new Promise(function(resolve,reject){
@@ -229,16 +203,6 @@
                         })
                     }
 
-                    // var getCurChapterContent = function(chapter_id,callback){
-                    //     $.get('data/data' + chapter_id + '.json',function(data){
-                    //         if(data.result === 0){
-                    //             var url = data.jsonp;
-                    //             Util.getBSONP(url,function(data){
-                    //                 callback && callback(data);
-                    //             })
-                    //         }
-                    //     },'json')
-                    // }
 
                     var getCurChapterContentPromise = function(chapter_id){
                         return new Promise(function(resolve,reject){
@@ -253,16 +217,6 @@
                         })
                     }
 
-                    // var prevChapter = function(UIcallback){
-                    //     // chapter_id = parseInt(chapter_id,10)
-                    //     if(Chapter_id == 0){
-                    //         return;
-                    //     }
-                    //     Chapter_id = Chapter_id - 1;
-                    //     getCurChapterContent(Chapter_id,UIcallback);
-                    //     Util.StorageSetter('last-chapter_id',Chapter_id)
-                    // }
-
                     var prevChapterPromise = function(){
                         return new Promise(function(resolve,reject){
                             if(Chapter_id == 0){
@@ -273,16 +227,6 @@
                             Util.StorageSetter('last-chapter_id',Chapter_id)
                         })
                     }
-                    
-                    // var nextChapter = function(UIcallback){
-                    //     // chapter_id = parseInt(chapter_id,10)
-                    //     if(Chapter_id == 0){
-                    //         return;
-                    //     }
-                    //     Chapter_id = Chapter_id + 1;
-                    //     getCurChapterContent(Chapter_id,UIcallback);
-                    //     Util.StorageSetter('last-chapter_id',Chapter_id)
-                    // }
 
                     var nextChapterPromise = function(){
                         return new Promise(function(resolve,reject){
@@ -290,7 +234,6 @@
                             return;
                             }
                             Chapter_id = Chapter_id + 1;
-                            alert(Chapter_id)
                             getCurChapterContentPromise(Chapter_id).then(resolve);
                             Util.StorageSetter('last-chapter_id',Chapter_id)
                         })
@@ -323,10 +266,6 @@
 
                 function EventHanlder() {
                     // todo 交互的事件绑定
-                    // touch
-                    // zepto tap
-                    // 4.0 click 300ms
-                    // t
                     $('#action_mid').click(function(){
                         if(Dom.top_nav.css('display') === 'none'){
                             Dom.bottom_nav.show();
