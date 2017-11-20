@@ -1,0 +1,353 @@
+                                   <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-derection" content="telephone=no">
+    <!-- 识别数据是连串数字时，不作为电话号码处理 -->
+    <meta http-equiv="X-UA-Comp                     atible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="css/reset.css"> -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/iconfont.css">
+</head>
+
+<body>
+    <div id="root" class="container">
+<!-- 
+        <div class="m-artical-action">
+            <div class="artical-action-mid" id="action_mid" style="display:block"></div>
+        </div> -->
+
+        <div id="top-nav" class="top-nav" style="display:block">
+            <div class="icon-back"><i class="iconfont icon-fanhui"></i></div>
+            <div class="nav-title">返回书架</div>
+        </div>
+
+        <div id="fiction_chapter_title"></div>
+        <div id="fiction_container" class="m-read-content">
+            
+        </div>
+        <!-- 模块的按钮条 -->
+        <div class="m-button-bar">
+            <!-- 独一无二的标签 -->
+            <ul class="u-tab">
+                <li id="prev-button">上一章</li>
+                <li id="next-button">下一章</li>
+            </ul>
+        </div>
+        <div class="nav-pannel-bk font-container" style="display:none"></div>
+        <div class="nav-pannel font-container" id="font-container" style="display:none">
+            <div class="child-mod">
+                <span>字号</span>
+                <button id="large-font" class="font-size-button">大</button>
+                <button id="small-font" class="font-size-button">小</button>
+            </div>
+            <div class="child-mod">
+                <span>背景</span>
+                <div class="bk-button" id="bk-button">
+                    <div class="bk-container">
+                        <div class="bk-container-current bk-niupizhi"></div>
+                    </div>
+                    <div class="bk-container">
+                        <div class="bk-container-current bk-green"></div>
+                    </div>
+                    <div class="bk-container">
+                        <div class="bk-container-current bk-blue"></div>
+                    </div>
+                    <div class="bk-container">
+                        <div class="bk-container-current bk-pink"></div>
+                    </div>
+                    <div class="bk-container">
+                        <div class="bk-container-current bk-gray"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav-bk bottom_nav" style="display:none"></div>
+
+        <div class="bottom-nav bottom_nav">
+            <div class="item" id="menu-button">
+                <div class="item-wrap">
+                    <div class="icon-menu"><i class="iconfont icon-mulu"></i></div>
+                    <div class="icon-text">
+                        目录
+                    </div>
+                </div>
+            </div>
+            <div class="item" id="font-button">
+                <div class="item-wrap">
+                    <div class="icon-ft"><i class="iconfont icon-icon-yxj-font"></i></div>
+                    <div class="icon-text">
+                        字体
+                    </div>
+                </div>
+            </div>
+
+            <div class="item" id="night-button">
+                <div class="item-wrap" style="display:none" id="day_icon">
+                    <div class="icon-day"><i class="iconfont icon-baitianmoshi"></i></div>
+                    <div class="icon-text">
+                        白天
+                    </div>
+                </div>
+                <div class="item-wrap" id="night_icon">
+                    <div class="icon-night"><i class="iconfont icon-yejian1"></i></div>
+                    <div class="icon-text">
+                        夜间
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+        <script src="lib/zepto.min.js"></script>
+        <script>
+            window.jQuery = $;
+        </script>
+        <script src="js/jquery.base64.js"></script>
+        <script src="js/jquery.jsonp.js"></script>
+        <script>
+            (function () {
+                var Util = (function () {
+                    var prefix = 'html5_reader_';
+                    var StorageGetter = function (key) {
+                        return localStorage.getItem(prefix + key);
+                    }
+                    var StorageSetter = function (key, val) {
+                        return localStorage.setItem(prefix + key, val);
+                    }
+                    var getBSONP = function(url,callback){
+                        return $.jsonp({
+                            url:url,
+                            cache:true,
+                            callback:'duokan_fiction_chapter',
+                            success:function(result){
+                                var data = $.base64.decode(result);
+                                var json = decodeURIComponent(escape(data));
+                                callback&&callback(json);
+                                
+                            }
+                        })
+                    }
+                    return {
+                        getBSONP :getBSONP,
+                         StorageGetter: StorageGetter,
+                        StorageSetter: StorageSetter
+                    }
+                })();
+
+                var Dom = {
+                    top_nav: $('#top-nav'),
+                    bottom_nav: $('.bottom_nav'),
+                    font_container:$('.font-container'),
+                    font_button:$('#font-button'),
+                    fiction_container:$('#fiction_container'),
+                    day_icon:$('#day_icon'),
+                    night_icon:$('#night_icon')
+                }
+
+                var Win = $(window);
+                var Doc = $(document);
+                var readerModelUI;
+                var readerUI;
+                var RootContainer = $('#fiction_container');
+                var initFontSize = Util.StorageGetter('font_size');
+                var Chapter_id;
+                
+                initFontSize = parseInt(initFontSize);
+                if(!initFontSize){
+                    initFontSize = 14;
+                }
+                RootContainer.css('font-size',initFontSize)
+
+                function main() {
+                    // todo 整个项目的入口函数
+                    readerModelUI = ReaderModel();
+                    readerUI = ReaderBaseFrame(RootContainer);
+                    
+                    readerModelUI.init(function(data){
+                        readerUI(data)
+                    });
+                    EventHanlder();
+                }
+
+                function ReaderModel() {
+                    // todo 实现和阅读器相关的数据交互的方法
+                    var ChapterTotal;
+                    var init = function(UIcallback){
+                        getFictionInfo(function(){
+                            getCurChapterContent(Chapter_id,function(data){
+                               // todo 
+                               UIcallback&&UIcallback(data);
+                            }) 
+                        })
+                    }
+                    var  getFictionInfo = function(callback){
+                        $.get('data/chapter.json',function(data){
+                            //todo 获取章节信息之后的回调
+                            Chapter_id = Util.StorageGetter('last_chapter_id');
+                            if(Chapter_id == null){
+                                Chapter_id = data.chapters[1].chapter_id;
+                            }
+                            ChapterTotal = data.chapters.length;
+                            callback&&callback();
+                        },'json');
+                    }
+
+                    var getCurChapterContent = function(chapter_id,callback){
+                        $.get('data/data' + chapter_id + '.json',function(data){
+                            if(data.result === 0){
+                                var url = data.jsonp;
+                                Util.getBSONP(url,function(data){
+                                    callback && callback(data);
+                                })
+                            }
+                        },'json')
+                    }
+
+                    var prevChapter = function(UIcallback){
+                        // chapter_id = parseInt(chapter_id,10)
+                        if(Chapter_id == 0){
+                            return;
+                        }
+                        Chapter_id = Chapter_id - 1;
+                        getCurChapterContent(Chapter_id,UIcallback);
+                        Util.StorageSetter('last-chapter_id',Chapter_id)
+                    }
+                    
+                    var nextChapter = function(UIcallback){
+                        // chapter_id = parseInt(chapter_id,10)
+                        if(Chapter_id == 0){
+                            return;
+                        }
+                        Chapter_id = Chapter_id + 1;
+                        getCurChapterContent(Chapter_id,UIcallback);
+                        Util.StorageSetter('last-chapter_id',Chapter_id)
+                    }
+                    return {
+                        init:init,
+                        prevChapter:prevChapter,
+                        nextChapter:nextChapter
+                    }
+                }
+
+                function ReaderBaseFrame(Container) {
+                    // todo 渲染基本的UI结构
+                    function parseChapterData(jsonData){
+                        
+                        var jsonObj = JSON.parse(jsonData)
+                        console.log('jsonObj',jsonObj)
+                        var html = '<h4>' + jsonObj.t + '</h4>'
+                        for(var i = 0;i<jsonObj.p.length;i++){
+                            html += "<p>" + jsonObj.p[i] + '</p>';
+                        }
+                        return html;
+                    }
+                    return function(data){
+                        Container.html(parseChapterData(data));
+                    }
+                }
+
+                function EventHanlder() {
+                    // todo 交互的事件绑定
+                    // touch
+                    // zepto tap
+                    // 4.0 click 300ms
+                    // t
+                    $('#action_mid').click(function(){
+                        if(Dom.top_nav.css('display') === 'none'){
+                            Dom.bottom_nav.show();
+                            Dom.top_nav.show();
+                        } else {
+                            Dom.bottom_nav.hide();
+                            Dom.top_nav.hide();
+                        }
+                    });
+
+                    Dom.font_button.click(function(){
+                        // 正在设置字体的状态
+                        if(Dom.font_container.css('display') === 'none'){
+                            Dom.font_container.show();
+                            Dom.font_button.find('i').addClass('current');
+                        }else{
+                            Dom.font_container.hide();
+                            Dom.font_button.find('i').removeClass('current');
+                        }
+                    });
+
+                    $('#night-button').click(function(){
+                        // todo 阅读模式（白日和夜间）切换的事件
+                        if(Dom.day_icon.css('display') == 'none'){
+                            Dom.day_icon.show();
+                            Dom.night_icon.hide();
+                            Dom.fiction_container.css({'background':'RGB(24,26,27)','color':'RGB(102,77,49)'})
+                        }else{
+                            Dom.day_icon.hide();
+                            Dom.night_icon.show();
+                            Dom.fiction_container.css({'background':'RGB(233,223,199)','color':'RGB(38,38,38)'})
+                        }
+                    });
+                    
+                    $('#large-font').click(function(){
+                        // 字体变大
+                        if(initFontSize > 20){
+                            return;
+                        }
+                        initFontSize += 1;
+                        RootContainer.css('font-size',initFontSize)
+                        Util.StorageSetter('font_size',initFontSize)
+                    });
+                    
+                    $('#small-font').click(function(){
+                        // 字体变小
+                        if(initFontSize < 12){
+                            return;
+                        }
+                        initFontSize -= 1;
+                        RootContainer.css('font-size',initFontSize)
+                        Util.StorageSetter('font_size',initFontSize)
+                    });
+
+                    $('#bk-button').click(function(e){
+                     // 背景色改变
+                        var bk_color = $(e.target).css("background")
+                        Dom.fiction_container.css("background",`${bk_color}`)
+                    });
+
+                    Win.scroll(function(){
+                        // 屏幕滚动，导航隐藏
+                        Dom.bottom_nav.hide();
+                        Dom.top_nav.hide();
+                    });
+                    
+                    $('#prev-button').click(function(){
+                        //往前翻一页
+                        console.log('prev-button')
+                        readerModelUI.prevChapter(function(data){
+                            readerUI(data)
+                        });
+                    });
+
+                    $('#next-button').click(function(){
+                        //往后翻一页,this指向next-button元素
+                            console.log('thisw1'+this)
+                        readerModelUI.nextChapter(function(data){
+                        //this指向window，作用域为全局作用域
+                            console.log('thisw2'+this)
+                            readerUI(data)
+                        });
+                    });
+
+                }
+
+                main();
+
+            })();
+        </script>
+</body>
+
+</html>

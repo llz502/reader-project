@@ -1,0 +1,292 @@
+ /* 页面 */
+        *,::after,::before{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
+        a,i{
+            textdecoration:none;
+        }
+        ul{
+            list-style: none;
+        }
+
+        body {
+            text-align: left;
+            width: 100%;
+            background: #e9dfc7;
+            /* 整体内容呈靠左对齐，内容区撑起整个页面的宽， */
+            /* 背景则是一个比较淡比较舒服的颜色 */
+        }
+
+        .m-read-content {
+            font-size: 14px;
+            color: #555;
+            line-height: 31px;
+            padding: 15px;
+            /* 一般适合阅读的字体大小是14px */
+            /* 颜色有设计图取一个比较舒服的绿色 */
+            /* 行高一般是字体的两倍多，行与行之间的间距大于一个字的大小
+            内容比较居于一起，且周围流出空位不会显得比较紧凑 */
+        }
+
+        .m-read-content h4 {
+            font-size: 20px;
+            color: #736357;
+            border-bottom: 1px solid #736357;
+            letter-spacing: 2px;
+            margin: 0 0 1em 0;
+            /* 标题大小比内容大6px, */
+            /* 字体比内容字体深，
+            下面有一条分割线直接在h4标签下写出，
+            标题与内容区有一个字体大小的间距 */
+        }
+
+        .m-read-content p {
+            text-indent: 2em;
+            margin: 0.5em 0;
+            letter-spacing: 0;
+            line-height: 24px;
+            /* 每行行首缩进两个字的大小
+            每行之间的间距是一个字的大小，
+            字与字之间的距离为0.
+            行高不大于两个字的大小 */
+        }
+
+        .m-button-bar {
+            width:70%;
+            max-width:800px;
+            padding: 5px;
+            margin:0px auto;
+            /* 宽度不能太宽设置为视口的70%，
+            如果屏幕太大，则限定最大宽度为800px,
+            用内容空白区留出，
+            margin居中 */
+        }
+
+        .u-tab {
+            height: 34px;
+            margin: 10px auto;
+            line-height: 34px;
+            border-radius: 8px;
+            border: 1px solid #858382;
+            font-size: 12px;
+            background: #000;
+            opacity: 0.9;
+            /*          按钮高度比两个字体大，与内容区保持距离，且水平居中
+            行高与按钮高度相同达到垂直居中的效果，有圆角，有边框，
+            字体大小比内容区小，背景是半透明的黑色*/
+        }
+
+        .u-tab li {
+            display: inline-block;
+            width: 49%;
+            text-align: center;
+            color: #fff;
+        }
+
+        .u-tab li:nth-child(1) {
+            border-right: 1px solid #858382
+        }
+        /* 覆盖屏幕的透明蒙层 */
+        /* .m-artical-action{
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 10000;
+        }
+        .m-artical-action>.artical-action-mid{
+            
+        } */
+        /* 顶部导航 */
+        .top-nav{
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            height: 50px;
+            width: 100%;
+            padding:13px 0;
+            z-index: 10009;
+            background: #000;
+        }
+        .top-nav>.icon-back{
+            float:left;
+            margin-left: 5px;
+            height: 23px;
+            width: 23px;
+        } 
+        .top-nav>.icon-back>i{
+            font-size: 22px;
+            color: #fff;
+            padding:4px;
+        }
+        .top-nav>.nav-title{
+            float: left;
+            margin-left:12px;
+            line-height: 23px;
+            height: 23px;
+            color: #fff;
+            
+        } 
+        .top-nav>.nav-title::after{
+            content: "";
+            display: block;
+            width: 0;
+            height:0;
+            clear: both;
+        }
+
+        .nav-pannel-bk{
+            position: fixed;
+            bottom: 0px;
+            height: 205px;
+            width: 100%;
+            background: #000;
+            z-index: 10005;
+        }
+        .nav-pannel{
+            position: fixed;
+            bottom: 70px;
+            width: 100%;
+            background: none;
+            color:#fff;
+            z-index: 10006;
+        }
+        .nav-pannel .child-mod {
+            padding: 5px 10px;
+            margin: 15px;
+        }
+        .nav-pannel .child-mod span {
+            display: inline-block;
+            padding-right:20px;
+            padding-left: 10px; 
+        }
+        .nav-pannel .child-mod .bk-button {
+            display: inline-block;
+        }
+        .nav-pannel .font-size-button {
+            background: none;
+            border:1px #8c8c8c solid;
+            border-radius: 16px;
+            padding: 5px 30px;
+            color: #fff;
+        }
+        .child-mod>button:nth-child(3) {
+            margin-left:10px;
+        }
+        .bk-container{
+            position: relative;
+            width:30px;
+            height:30px;
+            border-radius: 15px;
+            background: #fff;
+            display: inline-block;
+            vertical-align: -14px;
+            margin-right: 6px;
+        }
+        .bk-container-current{
+            position: absolute;
+            top:-2px;
+            left:-2px;
+            width:32px;
+            height:32px;
+            border-radius:16px;
+            display: inline-block;
+        }
+        .bk-niupizhi{
+            background: RGB(246,237,212);
+        }
+        .bk-green{
+            background: RGB(234,241,228);
+        }
+        .bk-blue{
+            background: RGB(232,240,240);
+        }
+        .bk-pink{
+            background: RGB(246,232,231);
+        }
+        .bk-gray{
+            background: RGB(230,230,229);
+        }
+ /* 底部导航 */
+        .bottom-nav-bk{
+            position: fixed;
+            bottom: 0px;
+            height: 205px;
+            width: 100%;
+            background: #000;
+            z-index: 10005;
+        }
+        .bottom-nav{
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            height: 70px;
+            width: 100%;
+            z-index: 10006;
+            background: #000;
+        }
+        .bottom-nav .item{
+            margin: 0 auto;
+            padding: 0;
+            float: left;
+        }
+        .bottom-nav .item-wrap{
+            margin: 0 25px;
+            padding: 0 15px;
+        }
+        .bottom-nav .item-wrap>.icon-text{
+            font-size: 20px;
+            display: block;
+            color: #fff;
+            padding: 0;
+            margin: 1px 0;
+            font-weight: normal;
+        }
+        .bottom-nav .item-wrap>.icon-menu{
+            margin-top: 8px;
+            display: block;
+            width: 40px;
+            height: 32px;
+            text-align: center;
+        }
+        .bottom-nav .item-wrap>.icon-menu>i{
+            font-size: 24px;
+            line-height: 32px;
+            color: #fff;
+            padding:4px;
+        }
+        .bottom-nav .item-wrap>.icon-ft{
+            margin-top: 8px;
+            display: block;
+            width: 40px;
+            height: 32px;
+            text-align: center;
+        }
+        .bottom-nav .item-wrap>.icon-ft>i{
+            font-size: 24px;
+            line-height: 32px;
+            color: #fff;
+            padding:4px;
+        }
+        .bottom-nav .item-wrap>.icon-ft>i.current{
+            color: rgb(255, 0, 0);
+        }
+        .bottom-nav .item-wrap>.icon-night,
+        .bottom-nav .item-wrap>.icon-day{
+            margin-top: 8px;
+            display: block;
+            width: 40px;
+            height: 32px;
+            text-align: center;
+        }
+        .bottom-nav .item-wrap>.icon-night>i,
+        .bottom-nav .item-wrap>.icon-day>i{
+            font-size: 24px;
+            line-height: 32px;
+            color: #fff;
+            padding:4px;
+        }
+
